@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:4000";
+const baseUrl = "https://crud-todo-wrw1.onrender.com/";
 
 const getAllToDo = (setToDo) => {
   axios.get(baseUrl).then(({ data }) => {
