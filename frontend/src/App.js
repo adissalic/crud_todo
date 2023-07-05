@@ -14,10 +14,23 @@ function App() {
     getAllToDo(setToDo);
   }, []);
 
+  const actionToDo = (e) => {
+    if (!isUpdating && text !== "") {
+      addToDo(text, setText, setToDo);
+    }
+    if (isUpdating && text !== "") {
+      updateToDo(toDoId, text, setToDo, setText, setIsUpdating);
+    } else return alert("Can not add empty field");
+  };
+
   const updateMode = (_id, text) => {
     setIsUpdating(true);
     setText(text);
     setToDoId(_id);
+  };
+  const exitUpdating = () => {
+    setIsUpdating(false);
+    setText("");
   };
   return (
     <div className={classes.app}>
@@ -29,19 +42,17 @@ function App() {
             placeholder="Add ToDos..."
             value={text}
             onChange={(e) => setText(e.target.value)}
+            autoFocus
           />
 
-          <div
-            className={classes.add}
-            onClick={
-              isUpdating
-                ? () =>
-                    updateToDo(toDoId, text, setToDo, setText, setIsUpdating)
-                : () => addToDo(text, setText, setToDo)
-            }
-          >
+          <div className={classes.add} onClick={actionToDo}>
             {isUpdating ? "Update" : "Add"}
           </div>
+          {isUpdating && (
+            <div className={classes.add} onClick={exitUpdating}>
+              Exit
+            </div>
+          )}
         </div>
         <div className={classes.list}>
           {toDo.map((item) => (
