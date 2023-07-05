@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import ToDo from "./components/ToDo";
+import LoadingSpinner from "../src/components/UIElements/LoadingSpinner";
 import { addToDo, getAllToDo, updateToDo, deleteToDo } from "./utils/HandleApi";
 
 import classes from "./App.module.css";
@@ -15,12 +16,13 @@ function App() {
   }, []);
 
   const actionToDo = (e) => {
-    if (!isUpdating && text !== "") {
+    if (!isUpdating && text.trim().length > 0) {
       addToDo(text, setText, setToDo);
     }
-    if (isUpdating && text !== "") {
+    if (isUpdating && text.trim().length > 0) {
       updateToDo(toDoId, text, setToDo, setText, setIsUpdating);
-    } else return alert("Can not add empty field");
+    }
+    if (text.trim().length === 0) alert("Can not add empty field");
   };
 
   const updateMode = (_id, text) => {
@@ -32,6 +34,10 @@ function App() {
     setIsUpdating(false);
     setText("");
   };
+  const changeInputHandler = (event) => {
+    setText(event.target.value);
+  };
+
   return (
     <div className={classes.app}>
       <div className={classes.container}>
@@ -41,7 +47,7 @@ function App() {
             type="text"
             placeholder="Add ToDos..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={changeInputHandler}
             autoFocus
           />
 
@@ -55,14 +61,18 @@ function App() {
           )}
         </div>
         <div className={classes.list}>
-          {toDo.map((item) => (
-            <ToDo
-              key={item._id}
-              text={item.text}
-              updateMode={() => updateMode(item._id, item.text)}
-              deleteToDo={() => deleteToDo(item._id, setToDo)}
-            />
-          ))}
+          {toDo.length > 0 ? (
+            toDo.map((item) => (
+              <ToDo
+                key={item._id}
+                text={item.text}
+                updateMode={() => updateMode(item._id, item.text)}
+                deleteToDo={() => deleteToDo(item._id, setToDo)}
+              />
+            ))
+          ) : (
+            <LoadingSpinner />
+          )}
         </div>
       </div>
     </div>
