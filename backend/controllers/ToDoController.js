@@ -10,7 +10,6 @@ module.exports.saveToDo = async (req, res) => {
 
   ToDoModel.create({ text }).then((data) => {
     console.log("Added Successfully...");
-    console.log(data);
     res.send(data);
   }); 
 };

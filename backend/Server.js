@@ -11,6 +11,7 @@ const PORT = process.env.port || 4000;
 
 app.use(express.json());
 app.use(cors());
+
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("Connected to databse"))

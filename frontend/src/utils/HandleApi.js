@@ -9,18 +9,26 @@ const getAllToDo = (setToDo) => {
     setToDo(data);
   });
 };
-const addToDo = (text, setText, setToDo) => {
+const addToDo = (text, setText, setToDo, setIsLoading) => {
   axios
     .post(`${baseUrl}/save`, { text })
     .then((data) => {
       console.log("Success, added", text);
       setText("");
       getAllToDo(setToDo);
+      setIsLoading(false);
     })
     .catch((err) => console.log(err));
 };
 
-const updateToDo = (toDoId, text, setToDo, setText, setIsUpdating) => {
+const updateToDo = (
+  toDoId,
+  text,
+  setToDo,
+  setText,
+  setIsUpdating,
+  setIsLoading
+) => {
   axios
     .patch(`${baseUrl}/update`, { _id: toDoId, text })
     .then((data) => {
@@ -28,6 +36,7 @@ const updateToDo = (toDoId, text, setToDo, setText, setIsUpdating) => {
       setText("");
       setIsUpdating(false);
       getAllToDo(setToDo);
+      setIsLoading(false);
     })
     .catch((err) => console.log(err));
 };
@@ -35,8 +44,8 @@ const updateToDo = (toDoId, text, setToDo, setText, setIsUpdating) => {
 const deleteToDo = (_id, setToDo) => {
   axios
     .delete(`${baseUrl}/delete`, { data: { _id } })
-    .then((data) => {
-      console.log(data);
+    .then(() => {
+      console.log("Deleted");
       getAllToDo(setToDo);
     })
     .catch((err) => console.log(err));
