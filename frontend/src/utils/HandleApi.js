@@ -1,12 +1,16 @@
 import axios from "axios";
 
 const baseUrl =
-  "https://crud-todo-wrw1.onrender.com" || "http://localhost:4000/";
+  "https://crud-todo-wrw1.onrender.com" || "http://localhost:4000";
 
-const getAllToDo = (setToDo) => {
+const getAllToDo = async (setToDo, setIsLoading, setIsEmpty) => {
+  setIsLoading(true);
   axios.get(baseUrl).then(({ data }) => {
-    //  console.log("data...", data);
     setToDo(data);
+    setIsLoading(false);
+    if (data.length < 1) {
+      setIsEmpty(true);
+    } else setIsEmpty(false);
   });
 };
 const addToDo = (text, setText, setToDo, setIsLoading) => {

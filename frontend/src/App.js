@@ -11,13 +11,13 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [toDoId, setToDoId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [emptyToDo, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    getAllToDo(setToDo);
-    setIsLoading(false);
-  }, [toDo]);
+    getAllToDo(setToDo, setIsLoading, setIsEmpty);
+  }, [toDo.length]);
 
-  const actionToDo = (e) => {
+  const actionToDo = async (e) => {
     if (!isUpdating && text.trim().length > 0) {
       setIsLoading(true);
       addToDo(text, setText, setToDo, setIsLoading);
@@ -27,6 +27,7 @@ function App() {
       updateToDo(toDoId, text, setToDo, setText, setIsUpdating, setIsLoading);
     }
     if (text.trim().length === 0) alert("Can not add empty field");
+    setIsEmpty(false);
   };
 
   const updateMode = (_id, text) => {
@@ -77,7 +78,7 @@ function App() {
           ) : (
             <LoadingSpinner />
           )}
-          {toDo.length === 0 && <div className={classes.top}>No todos</div>}
+          {emptyToDo && <div className={classes.top}>No todos</div>}
         </div>
       </div>
     </div>
