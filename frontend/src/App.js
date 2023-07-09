@@ -15,11 +15,7 @@ function App() {
   const [addingToDo, setIsAdding] = useState(false);
 
   useEffect(() => {
-    getAllToDo(setToDo);
-    setIsLoading(false);
-    if (toDo.length === 0) {
-      setIsEmpty(true);
-    } else setIsEmpty(false);
+    getAllToDo(setToDo, setIsEmpty, setIsLoading);
   }, [toDo.length]);
 
   const actionToDo = async (e) => {

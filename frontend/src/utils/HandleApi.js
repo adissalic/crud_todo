@@ -3,10 +3,21 @@ import axios from "axios";
 const baseUrl =
   "https://crud-todo-wrw1.onrender.com" || "http://localhost:4000";
 
-const getAllToDo = async (setToDo) => {
-  axios.get(baseUrl).then(({ data }) => {
-    setToDo(data);
-  });
+const getAllToDo = async (setToDo, setIsEmpty, setIsLoading) => {
+  try {
+    axios.get(baseUrl).then(({ data }) => {
+      setToDo(data);
+      if (data.length > 0) {
+        setIsEmpty(false);
+        setIsLoading(false);
+      } else {
+        setIsEmpty(true);
+        setIsLoading(false);
+      }
+    });
+  } catch (error) {
+    console.error("Can not get data", error);
+  }
 };
 const addToDo = (text, setText, setToDo, setIsAdding) => {
   axios
