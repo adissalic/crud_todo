@@ -12,19 +12,24 @@ function App() {
   const [toDoId, setToDoId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [emptyToDo, setIsEmpty] = useState(false);
+  const [addingToDo, setIsAdding] = useState(false);
 
   useEffect(() => {
-    getAllToDo(setToDo, setIsLoading, setIsEmpty);
+    getAllToDo(setToDo);
+    setIsLoading(false);
+    if (toDo.length === 0) {
+      setIsEmpty(true);
+    } else setIsEmpty(false);
   }, [toDo.length]);
 
   const actionToDo = async (e) => {
     if (!isUpdating && text.trim().length > 0) {
-      setIsLoading(true);
-      addToDo(text, setText, setToDo, setIsLoading);
+      setIsAdding(true);
+      addToDo(text, setText, setToDo, setIsAdding);
     }
     if (isUpdating && text.trim().length > 0) {
-      setIsLoading(true);
-      updateToDo(toDoId, text, setToDo, setText, setIsUpdating, setIsLoading);
+      setIsAdding(true);
+      updateToDo(toDoId, text, setToDo, setText, setIsUpdating, setIsAdding);
     }
     if (text.trim().length === 0) alert("Can not add empty field");
     setIsEmpty(false);
@@ -72,12 +77,13 @@ function App() {
                 key={item._id}
                 text={item.text}
                 updateMode={() => updateMode(item._id, item.text)}
-                deleteToDo={() => deleteToDo(item._id, setToDo)}
+                deleteToDo={() => deleteToDo(item._id, setToDo, setIsAdding)}
               />
             ))
           ) : (
             <LoadingSpinner />
           )}
+          {addingToDo && <LoadingSpinner />}
           {emptyToDo && <div className={classes.top}>No todos</div>}
         </div>
       </div>
