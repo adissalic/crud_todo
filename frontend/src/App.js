@@ -1,8 +1,15 @@
 import React from "react";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import ToDo from "./components/ToDo";
 import LoadingSpinner from "../src/components/UIElements/LoadingSpinner";
-import { addToDo, getAllToDo, updateToDo, deleteToDo } from "./utils/HandleApi";
+import {
+  addToDo,
+  getAllToDo,
+  updateToDo,
+  deleteToDo,
+  baseUrl,
+} from "./utils/HandleApi";
 
 import classes from "./App.module.css";
 function App() {
@@ -13,9 +20,25 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [emptyToDo, setIsEmpty] = useState(false);
   const [addingToDo, setIsAdding] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
-    getAllToDo(setToDo, setIsEmpty, setIsLoading);
+    try {
+      axios.get(baseUrl).then(({ data }) => {
+        setToDo(data);
+        setIsLoaded(true);
+        if (data.length === 0) {
+          setIsLoading(false);
+          setIsEmpty(true);
+        }
+        if (data.length > 0) {
+          setIsLoading(false);
+          setIsEmpty(false);
+        }
+      });
+    } catch (error) {
+      console.error("Can not get data", error);
+    }
   }, [toDo.length]);
 
   const actionToDo = async (e) => {
