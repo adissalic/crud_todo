@@ -5,7 +5,6 @@ import ToDo from "./components/ToDo";
 import LoadingSpinner from "../src/components/UIElements/LoadingSpinner";
 import {
   addToDo,
-  getAllToDo,
   updateToDo,
   deleteToDo,
   baseUrl,
